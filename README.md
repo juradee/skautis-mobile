@@ -116,7 +116,7 @@ ať demo režim a testy dál fungují.
   neservírují z cache. Cache drží jen skořápku, statické assety (ty mají v URL
   digest, takže je hit vždycky správný) a poslední viděnou podobu stránky pro
   offline stav.
-- Ikony v `assets/icons/` generuje `tools/generate-icons.py` (SVG i PNG ze stejné geometrie).
+- Zdrojem ikon je `assets/icons/icon.svg`; PNG velikosti pro manifest a iOS jsou z něj odvozené.
 
 ## Vývoj
 

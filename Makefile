@@ -46,7 +46,8 @@ test-bundle: ## Run the bundle's own suite against its own dependencies
 stan: ## Run PHPStan
 	$(PHP) vendor/bin/phpstan analyse
 
-cs: ## Fix coding standards
+cs: ## Fix coding standards (aplikace i balíček mají vlastní sadu pravidel)
 	$(PHP) vendor/bin/php-cs-fixer fix
+	$(PHP) vendor/bin/php-cs-fixer fix --config packages/skautis-symfony/.php-cs-fixer.dist.php
 
 .PHONY: help build install up down restart logs sh composer console cc test test-bundle stan cs

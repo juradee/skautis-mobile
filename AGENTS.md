@@ -134,5 +134,8 @@ Repozitář je **dvě věci pod jednou licencí každá**:
   Testy běží vždy takhle.
 - **Hlavní větev se jmenuje `master`.** Ne `main` – ani tady, ani v odštěpeném
   repozitáři balíčku, ani v příkladech v dokumentaci.
+- **Žádné Python skripty v repozitáři.** Tohle je PHP projekt; pomocné skripty piš
+  v PHP (konzolový příkaz), nebo je nech mimo repo. Platí i pro jednorázové
+  generátory a build nástroje.
 - **Do balíčku nepatří nic z `App\`.** Žádné jméno routy, žádná šablona – co aplikace
   potřebuje nastavit, jde přes konfiguraci bundlu (`webwings_skautis`).
