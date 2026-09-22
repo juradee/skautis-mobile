@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Osoby{% endblock %}
+{% block heading %}{{ unit ? unit.displayName : 'Osoby' }}{% endblock %}
+
+{% block body %}
+    {% if units|length > 1 %}
+        <form method="get" class="filterbar" data-turbo-action="advance">
+            <label class="visually-hidden" for="unit-select">Jednotka</label>
+            <select id="unit-select" name="jednotka" class="select" onchange="this.form.requestSubmit()">
+                {% for u in units %}
+                    <option value="{{ u.id }}" {{ u.id == current_unit_id ? 'selected' }}>{{ u.displayName }}</option>
+                {% endfor %}
+            </select>
+        </form>
+    {% endif %}
+
+    <div data-controller="filter">
+        <div class="searchbar">
+            {{ include('_partials/icon.html.twig', { name: 'search' }) }}
+            <input type="search" class="searchbar__input" placeholder="Hledat jméno nebo přezdívku"
+                   aria-label="Hledat osobu"
+                   data-filter-target="input" data-action="input->filter#filter">
+        </div>
+
+        <p class="count"><span data-filter-target="count">{{ people|length }}</span> z {{ people|length }} osob</p>
+
+        <ul class="list" data-filter-target="list">
+            {% for person in people %}
+                <li data-filter-term="{{ (person.displayName ~ ' ' ~ (person.nickName ?? ''))|lower }}">
+                    <a class="row" href="{{ path('app_person_detail', { id: person.id }) }}">
+                        <span class="avatar">{{ person.initials }}</span>
+                        <span class="row__body">
+                            <strong>{{ person.label }}</strong>
+                            <span class="row__meta">
+                                {%- if person.age is not null %}{{ person.age }} let{% endif -%}
+                                {%- if person.city %}{{ person.age is not null ? ' · ' }}{{ person.city }}{% endif -%}
+                            </span>
+                        </span>
+                    </a>
+                </li>
+            {% else %}
+                <li class="empty">V této jednotce nejsou žádní členové.</li>
+            {% endfor %}
+        </ul>
+
+        <p class="empty" data-filter-target="empty" hidden>Nikdo neodpovídá hledání.</p>
+    </div>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% set current = app.request.attributes.get('_route') %}
+<nav class="tabbar" aria-label="Hlavní navigace">
+    {% set items = [
+        { route: 'app_dashboard',    label: 'Přehled',  icon: 'home' },
+        { route: 'app_unit_current', label: 'Jednotka', icon: 'unit' },
+        { route: 'app_person_index', label: 'Osoby',    icon: 'people' },
+        { route: 'app_role_index',   label: 'Role',     icon: 'role' },
+    ] %}
+    {% for item in items %}
+        <a class="tabbar__item{{ current starts with item.route ? ' is-active' : '' }}"
+           href="{{ path(item.route) }}"
+           {{ current starts with item.route ? 'aria-current="page"' : '' }}>
+            {{ include('_partials/icon.html.twig', { name: item.icon }) }}
+            <span>{{ item.label }}</span>
+        </a>
+    {% endfor %}
+</nav>

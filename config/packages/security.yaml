@@ -1,0 +1,37 @@
+security:
+    providers:
+        skautis:
+            id: Webwings\SkautisBundle\Security\SkautisUserProvider
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        main:
+            lazy: true
+            provider: skautis
+            custom_authenticators:
+                - Webwings\SkautisBundle\Security\SkautisAuthenticator
+            entry_point: Webwings\SkautisBundle\Security\SkautisAuthenticator
+            logout:
+                # skautIS redirects here after ending its own session.
+                path: app_logout
+                target: app_logged_out
+
+    access_control:
+        - { path: ^/login$, roles: PUBLIC_ACCESS }
+        - { path: ^/logout$, roles: PUBLIC_ACCESS }
+        - { path: ^/odhlaseno$, roles: PUBLIC_ACCESS }
+        - { path: ^/offline$, roles: PUBLIC_ACCESS }
+        - { path: ^/manifest\.webmanifest$, roles: PUBLIC_ACCESS }
+        - { path: ^/, roles: ROLE_USER }
+
+when@test:
+    security:
+        password_hashers:
+            Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
+                algorithm: auto
+                cost: 4
+                time_cost: 3
+                memory_cost: 10

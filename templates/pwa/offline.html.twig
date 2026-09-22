@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bez připojení{% endblock %}
+{% block header %}{% endblock %}
+
+{% block body %}
+    <div class="hero">
+        <h1 class="hero__title">Jsi offline</h1>
+        <p class="hero__lead">Tuhle stránku se nepodařilo načíst. Data ze skautISu potřebují připojení.</p>
+    </div>
+    <button type="button" class="btn btn--primary btn--block" onclick="window.location.reload()">Zkusit znovu</button>
+{% endblock %}

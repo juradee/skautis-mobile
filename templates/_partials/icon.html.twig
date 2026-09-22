@@ -1,0 +1,13 @@
+{% set paths = {
+    home:   'M3 11.5 12 4l9 7.5M5.5 10v9.5h13V10',
+    unit:   'M4 20V9.5L12 4l8 5.5V20M9.5 20v-6h5v6',
+    people: 'M8 11a3.2 3.2 0 1 0 0-6.4A3.2 3.2 0 0 0 8 11Zm8.5.5a2.7 2.7 0 1 0 0-5.4 2.7 2.7 0 0 0 0 5.4ZM2.5 19.5c0-3 2.5-5 5.5-5s5.5 2 5.5 5m3-5.2c2.4.3 4 2.2 4 5.2',
+    role:   'M12 3.5 5 6.5v5c0 4.2 2.9 7.6 7 9 4.1-1.4 7-4.8 7-9v-5l-7-3Z',
+    phone:  'M6.5 3.5h3l1.5 4-2 1.5a12 12 0 0 0 6 6L16.5 13l4 1.5v3a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4.5 5.7a2 2 0 0 1 2-2.2Z',
+    mail:   'M3.5 6.5h17v11h-17v-11Zm0 .5 8.5 6.5L20.5 7',
+    back:   'M14.5 5.5 8 12l6.5 6.5',
+    search: 'M11 17.5a6.5 6.5 0 1 0 0-13 6.5 6.5 0 0 0 0 13Zm4.8-1.7 4 4',
+} %}
+<svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <path d="{{ paths[name] ?? paths.home }}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

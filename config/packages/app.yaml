@@ -1,0 +1,14 @@
+framework:
+    session:
+        # skautIS posts the login to us cross-site; lax still lets the redirect
+        # that follows carry the cookie.
+        cookie_samesite: lax
+        cookie_secure: auto
+        cookie_httponly: true
+        gc_maxlifetime: 7200
+
+    trusted_proxies: '%env(default::TRUSTED_PROXIES)%'
+    trusted_headers: ['x-forwarded-for', 'x-forwarded-proto', 'x-forwarded-port', 'x-forwarded-prefix']
+
+twig:
+    form_themes: ['form_div_layout.html.twig']

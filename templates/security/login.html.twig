@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Přihlášení{% endblock %}
+
+{% block header %}{% endblock %}
+
+{% block body %}
+    <div class="hero">
+        <img class="hero__logo" src="{{ asset('icons/icon.svg') }}" alt="" width="88" height="88">
+        <h1 class="hero__title">skautIS mobil</h1>
+        <p class="hero__lead">Oddíl, členové a kontakty po ruce. Přihlášení probíhá přímo ve skautISu.</p>
+    </div>
+
+    {% if error %}
+        <p class="alert alert--error">{{ error.messageKey|trans(error.messageData, 'security') }}</p>
+    {% endif %}
+
+    {% if mock %}
+        <form method="post" action="{{ path('app_login') }}" class="stack">
+            <input type="hidden" name="skautIS_Token" value="{{ mock_token }}">
+            <button type="submit" class="btn btn--primary btn--block">Přihlásit se jako demo uživatel</button>
+        </form>
+        <p class="note">
+            Běží <strong>demo režim</strong> – data pocházejí ze souborů ve <code>fixtures/skautis</code>.
+            Až bude aplikace zaregistrovaná, nastav <code>SKAUTIS_APP_ID</code> a <code>SKAUTIS_MOCK=0</code>.
+        </p>
+    {% elseif configured %}
+        <a class="btn btn--primary btn--block" href="{{ skautis_login_url }}" data-turbo="false">Přihlásit se přes skautIS</a>
+        <p class="note">Budeš přesměrován na skautIS. Po přihlášení tě vrátí zpátky sem.</p>
+    {% else %}
+        <p class="alert alert--error">
+            Není nastavené <code>SKAUTIS_APP_ID</code>. Doplň ho do <code>.env.local</code>, nebo zapni demo režim
+            přes <code>SKAUTIS_MOCK=1</code>.
+        </p>
+    {% endif %}
+
+    <div class="stack" data-controller="pwa-install">
+        <button type="button" class="btn btn--ghost btn--block" data-pwa-install-target="button" hidden
+                data-action="pwa-install#install">Nainstalovat do telefonu</button>
+    </div>
+{% endblock %}

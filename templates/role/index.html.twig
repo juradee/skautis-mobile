@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Role{% endblock %}
+{% block heading %}Role{% endblock %}
+
+{% block body %}
+    <p class="note">Role určuje, co ti skautIS dovolí vidět. Přepnutí platí i ve skautISu samotném.</p>
+
+    <ul class="list">
+        {% for role in roles %}
+            <li class="row row--form">
+                <span class="row__body">
+                    <strong>{{ role.name }}</strong>
+                    <span class="row__meta">{{ role.unitName ?? '—' }}{% if role.registrationNumber %} · {{ role.registrationNumber }}{% endif %}</span>
+                </span>
+                {% if current and role.id == current.id %}
+                    <span class="badge">aktivní</span>
+                {% else %}
+                    <form method="post" action="{{ path('app_role_switch', { id: role.id }) }}">
+                        <input type="hidden" name="_token" value="{{ csrf_token('switch-role') }}">
+                        <button type="submit" class="btn btn--small">Přepnout</button>
+                    </form>
+                {% endif %}
+            </li>
+        {% else %}
+            <li class="empty">skautIS nevrátil žádné aktivní role.</li>
+        {% endfor %}
+    </ul>
+
+    <h2 class="section">Účet</h2>
+    <ul class="list">
+        <li class="row"><span class="row__body">
+            <strong>{{ app.user.displayName }}</strong>
+            <span class="row__meta">{{ app.user.userIdentifier }}</span>
+        </span></li>
+    </ul>
+
+    <a class="btn btn--ghost btn--block" href="{{ path('app_logout_start') }}" data-turbo="false">Odhlásit se</a>
+{% endblock %}

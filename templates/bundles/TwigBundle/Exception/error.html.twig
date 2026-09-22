@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Chyba {{ status_code }}{% endblock %}
+{% block header %}{% endblock %}
+
+{% block body %}
+    <div class="hero">
+        <h1 class="hero__title">{{ status_code }}</h1>
+        <p class="hero__lead">
+            {%- if status_code == 403 -%}
+                Tvoje role na tohle nemá ve skautISu oprávnění.
+            {%- elseif status_code == 404 -%}
+                Tahle stránka neexistuje.
+            {%- elseif status_code == 503 -%}
+                skautIS teď neodpovídá. Zkus to prosím za chvíli.
+            {%- else -%}
+                Něco se nepovedlo.
+            {%- endif -%}
+        </p>
+    </div>
+    <a class="btn btn--primary btn--block" href="{{ path('app_dashboard') }}">Zpátky na přehled</a>
+{% endblock %}

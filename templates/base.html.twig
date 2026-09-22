@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="cs" data-turbo-suppress-warning>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+        <title>{% block title %}skautIS mobil{% endblock %}</title>
+
+        <link rel="manifest" href="{{ path('app_manifest') }}">
+        <meta name="theme-color" content="#1b5e20" media="(prefers-color-scheme: light)">
+        <meta name="theme-color" content="#0d2b10" media="(prefers-color-scheme: dark)">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+        <meta name="apple-mobile-web-app-title" content="skautIS">
+        <link rel="icon" href="{{ asset('icons/icon.svg') }}" type="image/svg+xml">
+        <link rel="apple-touch-icon" href="{{ asset('icons/icon-180.png') }}">
+
+        {% block stylesheets %}{% endblock %}
+        {% block javascripts %}
+            {% block importmap %}{{ importmap('app') }}{% endblock %}
+        {% endblock %}
+    </head>
+    <body{% if app.user %} class="has-nav"{% endif %}>
+        {% block header %}
+            <header class="appbar">
+                <div class="appbar__row">
+                    {% block appbar_lead %}
+                        <span class="appbar__brand">{% block heading %}{{ block('title') }}{% endblock %}</span>
+                    {% endblock %}
+                    {% block appbar_trail %}
+                        {% if app.user and app.user.currentRole %}
+                            <a class="chip" href="{{ path('app_role_index') }}">{{ app.user.currentRole.unitName ?? app.user.currentRole.name }}</a>
+                        {% endif %}
+                    {% endblock %}
+                </div>
+            </header>
+        {% endblock %}
+
+        <main class="content" id="content">
+            {% include '_partials/flashes.html.twig' %}
+            {% block body %}{% endblock %}
+        </main>
+
+        {% if app.user %}
+            {% include '_partials/nav.html.twig' %}
+        {% endif %}
+    </body>
+</html>

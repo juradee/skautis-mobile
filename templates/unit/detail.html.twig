@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ unit.displayName }}{% endblock %}
+{% block heading %}{{ unit.displayName }}{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <span class="card__label">{{ unit.unitType ?? 'Jednotka' }}</span>
+        <strong class="card__title">{{ unit.displayName }}</strong>
+        {% if unit.registrationNumber %}<span class="card__meta">Evidenční číslo {{ unit.registrationNumber }}</span>{% endif %}
+    </div>
+
+    <div class="grid-2">
+        <a class="stat" href="{{ path('app_person_index', { jednotka: unit.id }) }}">
+            <span class="stat__value">{{ member_count }}</span>
+            <span class="stat__label">členů celkem</span>
+        </a>
+        <div class="stat">
+            <span class="stat__value">{{ direct_member_count }}</span>
+            <span class="stat__label">přímo v jednotce</span>
+        </div>
+    </div>
+
+    {% if unit.address or unit.email or unit.phone %}
+        <h2 class="section">Kontakt</h2>
+        <ul class="list">
+            {% if unit.address %}<li class="row"><span class="row__body"><strong>{{ unit.address }}</strong><span class="row__meta">Adresa</span></span></li>{% endif %}
+            {% if unit.phone %}
+                <li><a class="row" href="tel:{{ unit.phone|replace({' ': ''}) }}">
+                    {{ include('_partials/icon.html.twig', { name: 'phone' }) }}
+                    <span class="row__body"><strong>{{ unit.phone }}</strong><span class="row__meta">Telefon</span></span>
+                </a></li>
+            {% endif %}
+            {% if unit.email %}
+                <li><a class="row" href="mailto:{{ unit.email }}">
+                    {{ include('_partials/icon.html.twig', { name: 'mail' }) }}
+                    <span class="row__body"><strong>{{ unit.email }}</strong><span class="row__meta">E-mail</span></span>
+                </a></li>
+            {% endif %}
+        </ul>
+    {% endif %}
+
+    {% if children %}
+        <h2 class="section">Podřízené jednotky</h2>
+        <ul class="list">
+            {% for child in children %}
+                <li><a class="row" href="{{ path('app_unit_detail', { id: child.id }) }}">
+                    <span class="row__body">
+                        <strong>{{ child.displayName }}</strong>
+                        {% if child.registrationNumber %}<span class="row__meta">{{ child.registrationNumber }}</span>{% endif %}
+                    </span>
+                </a></li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}

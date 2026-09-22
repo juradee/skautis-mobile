@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ person.displayName }}{% endblock %}
+
+{% block appbar_lead %}
+    <a class="appbar__back" href="{{ path('app_person_index') }}" aria-label="Zpět na seznam">
+        {{ include('_partials/icon.html.twig', { name: 'back' }) }}
+    </a>
+    <span class="appbar__brand">{{ person.displayName }}</span>
+{% endblock %}
+
+{% block body %}
+    <div class="profile">
+        <span class="avatar avatar--lg">{{ person.initials }}</span>
+        <h1 class="profile__name">{{ person.label }}</h1>
+        <p class="profile__meta">
+            {%- if person.age is not null %}{{ person.age }} let{% endif -%}
+            {%- if person.birthday %} · {{ person.birthday|format_date(pattern: 'd. M. y') }}{% endif -%}
+        </p>
+    </div>
+
+    {% set phones = person.phones %}
+    {% set emails = person.emails %}
+
+    {% if phones or emails %}
+        <h2 class="section">Kontakty</h2>
+        <ul class="list">
+            {% for contact in phones %}
+                <li><a class="row" href="tel:{{ contact.dialable }}">
+                    {{ include('_partials/icon.html.twig', { name: 'phone' }) }}
+                    <span class="row__body">
+                        <strong>{{ contact.value }}</strong>
+                        <span class="row__meta">{{ contact.typeLabel ?: 'Telefon' }}{{ contact.isParent ? ' · rodič' }}</span>
+                    </span>
+                </a></li>
+            {% endfor %}
+            {% for contact in emails %}
+                <li><a class="row" href="mailto:{{ contact.value }}">
+                    {{ include('_partials/icon.html.twig', { name: 'mail' }) }}
+                    <span class="row__body">
+                        <strong>{{ contact.value }}</strong>
+                        <span class="row__meta">{{ contact.typeLabel ?: 'E-mail' }}{{ contact.isParent ? ' · rodič' }}</span>
+                    </span>
+                </a></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="empty">Žádné kontakty nejsou ve skautISu vyplněné, nebo k nim tvoje role nemá přístup.</p>
+    {% endif %}
+
+    {% if person.street or person.city %}
+        <h2 class="section">Adresa</h2>
+        <ul class="list">
+            <li class="row"><span class="row__body">
+                <strong>{{ person.street }}</strong>
+                <span class="row__meta">{{ person.postcode }} {{ person.city }}</span>
+            </span></li>
+        </ul>
+    {% endif %}
+{% endblock %}

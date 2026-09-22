@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Odhlášeno{% endblock %}
+{% block header %}{% endblock %}
+
+{% block body %}
+    <div class="hero">
+        <h1 class="hero__title">Odhlášeno</h1>
+        <p class="hero__lead">Relace ve skautISu byla ukončena.</p>
+    </div>
+    <a class="btn btn--primary btn--block" href="{{ path('app_login') }}">Přihlásit se znovu</a>
+{% endblock %}

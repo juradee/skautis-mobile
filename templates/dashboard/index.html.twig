@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Přehled{% endblock %}
+{% block heading %}{{ app.user.displayName }}{% endblock %}
+
+{% block body %}
+    {% if unit %}
+        <a class="card card--link" href="{{ path('app_unit_detail', { id: unit.id }) }}">
+            <span class="card__label">Moje jednotka</span>
+            <strong class="card__title">{{ unit.displayName }}</strong>
+            {% if unit.registrationNumber %}<span class="card__meta">{{ unit.registrationNumber }}</span>{% endif %}
+        </a>
+    {% else %}
+        <p class="empty">Aktuální role nemá přiřazenou jednotku.</p>
+    {% endif %}
+
+    <div class="grid-2">
+        <a class="stat" href="{{ path('app_person_index') }}">
+            <span class="stat__value">{{ member_count }}</span>
+            <span class="stat__label">členů</span>
+        </a>
+        <a class="stat" href="{{ path('app_unit_current') }}">
+            <span class="stat__value">{{ child_units|length }}</span>
+            <span class="stat__label">podřízených jednotek</span>
+        </a>
+    </div>
+
+    {% if birthdays %}
+        <h2 class="section">Blížící se narozeniny</h2>
+        <ul class="list">
+            {% for item in birthdays %}
+                <li>
+                    <a class="row" href="{{ path('app_person_detail', { id: item.person.id }) }}">
+                        <span class="avatar">{{ item.person.initials }}</span>
+                        <span class="row__body">
+                            <strong>{{ item.person.label }}</strong>
+                            <span class="row__meta">
+                                {{ item.date|format_date(pattern: 'd. M.') }}
+                                · {{ item.days == 0 ? 'dnes' : (item.days == 1 ? 'zítra' : 'za ' ~ item.days ~ ' dní') }}
+                            </span>
+                        </span>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% if child_units %}
+        <h2 class="section">Podřízené jednotky</h2>
+        <ul class="list">
+            {% for child in child_units %}
+                <li>
+                    <a class="row" href="{{ path('app_unit_detail', { id: child.id }) }}">
+                        <span class="row__body">
+                            <strong>{{ child.displayName }}</strong>
+                            {% if child.registrationNumber %}<span class="row__meta">{{ child.registrationNumber }}</span>{% endif %}
+                        </span>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}

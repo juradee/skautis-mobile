@@ -1,0 +1,9 @@
+webwings_skautis:
+    base_url: '%env(SKAUTIS_BASE_URL)%'
+    app_id: '%env(string:SKAUTIS_APP_ID)%'
+    # Bez registrované aplikace se odpovídá z fixtures dodaných v bundlu.
+    mock: '%env(bool:SKAUTIS_MOCK)%'
+    security:
+        login_route: app_login
+        success_route: app_dashboard
+        logout_route: app_logout
