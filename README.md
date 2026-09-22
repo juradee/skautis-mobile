@@ -17,14 +17,26 @@ make install    # composer install + frontend vendor assety
 make up         # nastartuje php-fpm + nginx + PostgreSQL
 ```
 
-Aplikace běží na <http://localhost:8080>. Bez nastaveného `SKAUTIS_APP_ID` jede
+Aplikace běží na <http://skautis.localhost>. Bez nastaveného `SKAUTIS_APP_ID` jede
 v **demo režimu** – přihlásíš se tlačítkem „Přihlásit se jako demo uživatel“ a
 všechna data pocházejí ze souborů ve `fixtures/skautis/`.
 
 `make` bez parametrů vypíše všechny cíle (`sh`, `console`, `test`, `stan`, `cs`, …).
 
-> Service worker potřebuje zabezpečený kontext. `http://localhost` se za
-> zabezpečený považuje, takže PWA jde testovat lokálně; přes IP adresu v síti už ne.
+Provoz jde přes Traefik, který je součástí stacku a poslouchá na portu 80.
+**Každý projekt tady má vlastní Traefik**, takže port 80 může držet jen jeden —
+když ho drží jiný projekt, buď ho zastav, nebo si nastav jiný port:
+
+```bash
+HTTP_PORT=8080 make up      # pak http://skautis.localhost:8080
+```
+
+> Service worker potřebuje zabezpečený kontext. Prohlížeče považují za
+> zabezpečené i `*.localhost`, takže PWA jde na `skautis.localhost` testovat
+> včetně instalace; přes IP adresu v síti už ne.
+>
+> Jméno `skautis.localhost` se překládá na 127.0.0.1 samo (systemd-resolved).
+> Pokud by ne, doplň si ho do `/etc/hosts` — do systémových souborů nesahám.
 
 ## Připojení k opravdovému skautISu
 

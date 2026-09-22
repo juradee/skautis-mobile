@@ -14,7 +14,7 @@ build: ## Build the PHP image
 install: ## Install PHP and frontend dependencies (needed after a fresh clone)
 	$(DC) run --rm --no-deps php composer install
 
-up: ## Start the stack (http://localhost:8080)
+up: ## Start the stack (http://skautis.localhost)
 	$(DC) up -d
 
 down: ## Stop the stack

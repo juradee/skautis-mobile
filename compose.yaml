@@ -15,14 +15,39 @@ services:
       database:
         condition: service_healthy
 
+  traefik:
+    image: traefik:v3
+    command:
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --providers.docker.network=skautis-mobile_traefik
+      - --entrypoints.web.address=:80
+      - --api.dashboard=true
+      - --log.level=INFO
+    ports:
+      # Port 80 může držet jen jeden projekt; jinak HTTP_PORT=8080 make up.
+      - "${HTTP_PORT:-80}:80"
+      - "${TRAEFIK_DASHBOARD_PORT:-8081}:8080"
+    volumes:
+      # Rootless Docker: socket je v runtime adresáři uživatele, ne ve /var/run.
+      - ${DOCKER_SOCK:-/run/user/1000/docker.sock}:/var/run/docker.sock:ro
+    networks:
+      - traefik
+
   nginx:
     image: nginx:1.27-alpine
-    ports:
-      # Service workers need a secure context; http://localhost counts as one.
-      - "${HTTP_PORT:-8080}:80"
     volumes:
       - .:/app:ro
       - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - default
+      - traefik
+    labels:
+      traefik.enable: 'true'
+      traefik.docker.network: skautis-mobile_traefik
+      traefik.http.routers.skautis.rule: Host(`${APP_HOST:-skautis.localhost}`)
+      traefik.http.routers.skautis.entrypoints: web
+      traefik.http.services.skautis.loadbalancer.server.port: '80'
     depends_on:
       - php
 
@@ -44,6 +69,10 @@ services:
       # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
       # - ./docker/db/data:/var/lib/postgresql/data:rw
 ###< doctrine/doctrine-bundle ###
+
+networks:
+  traefik:
+    name: skautis-mobile_traefik
 
 volumes:
 ###> doctrine/doctrine-bundle ###
